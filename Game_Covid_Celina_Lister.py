@@ -4,30 +4,29 @@ import os
 import time
 import random
 
-pygame.font.init()
+pygame.font.init() #Fonte para ser utilizada no jogo
 
 #Definindo altura e largura da janela do jogo
-WIDTH, HEIGHT = 750, 750
-JANELA = pygame.display.set_mode((WIDTH, HEIGHT))
-pygame.display.set_caption("Kill Covid Game")
+WIDTH, HEIGHT = 750, 750 #Dimensões do display
+JANELA = pygame.display.set_mode((WIDTH, HEIGHT)) #Definição do display
+pygame.display.set_caption("Kill Covid Game") #Nome do jogo
 
 #Imagens que vão ser utilizadas
-INIMIGO_VERMELHO = pygame.image.load(os.path.join("covid_vermelho.png"))
-INIMIGO_VERDE = pygame.image.load(os.path.join("covid_verde.png"))
-INIMIGO_AZUL = pygame.image.load(os.path.join("covid_azul.png"))
+INIMIGO_VERMELHO = pygame.image.load(os.path.join("covid_vermelho.png")) #Covid vermelho
+INIMIGO_VERDE = pygame.image.load(os.path.join("covid_verde.png")) #Covid verde
+INIMIGO_AZUL = pygame.image.load(os.path.join("covid_azul.png")) #Covid azul
 
 #NAVE DO JOGADOR
-logo_sus = pygame.image.load(os.path.join("logo_sus.png"))
+logo_sus = pygame.image.load(os.path.join("logo_sus.png")) #Nave do jogador feita com o logotipo do SUS
 
 # Lasers
-CORONA_VERMELHO = pygame.image.load(os.path.join("laser_vermelho.png"))
-CORONA_VERDE = pygame.image.load(os.path.join("laser_verde.png"))
-CORONA_AZUL = pygame.image.load(os.path.join("laser_azul.png"))
-VACINA = pygame.image.load(os.path.join("vacina_covid.png"))
+CORONA_VERMELHO = pygame.image.load(os.path.join("laser_vermelho.png")) #laser que o covid lança #se quiser, pode pensar em mais coisas além do laser, mas temos pouco tempo
+CORONA_VERDE = pygame.image.load(os.path.join("laser_verde.png")) #laser que o covid lança
+CORONA_AZUL = pygame.image.load(os.path.join("laser_azul.png")) #laser que o covid lança
+VACINA = pygame.image.load(os.path.join("vacina_covid.png")) #laser que o covid lança
 
 #Fundo do jogo
 FUNDO_COVID= pygame.transform.scale(pygame.image.load(os.path.join("fundo_covid.png")), (WIDTH, HEIGHT))
-
 
 class Corona:
     def __init__(self, x, y, img):
@@ -38,7 +37,7 @@ class Corona:
 #Desenhando a janela do jogo
     def desenhar(self, janelinha):
         janelinha.blit(self.img, (self.x, self.y))
-#Definnindo os movimentos
+#Definindo os movimentos
     def move(self, vel):
         self.y += vel
 
@@ -75,13 +74,13 @@ class Nave:
                 obj.health -= 10
                 self.lasers.remove(laser)
 
-    def tempo_espera(self):
+    def tempo_espera(self): #Define tempo de espera
         if self.contador_tempo_espera >= self.Tempo_de_espera:
             self.contador_tempo_espera = 0
         elif self.contador_tempo_espera > 0:
             self.contador_tempo_espera += 1
 
-    def atirar(self):
+    def atirar(self): #Função designada para atirar
         if self.contador_tempo_espera == 0:
             laser = Corona(self.x, self.y, self.laser_img)
             self.lasers.append(laser)
@@ -93,7 +92,7 @@ class Nave:
     def get_height(self):
         return self.nave_img.get_height()
 
-class Jogador(Nave):
+class Jogador(Nave): #Nave do Jogador (SUS)
     def __init__(self, x, y, health=100):
         super().__init__(x, y, health)
         self.nave_img = logo_sus
@@ -118,12 +117,12 @@ class Jogador(Nave):
         super().desenhar(janelinha)
         self.barra_de_vidas(janelinha)
 
-    def barra_de_vidas(self, janelinha):
+    def barra_de_vidas(self, janelinha): #Vida disponível
         pygame.draw.rect(janelinha, (255,0,0), (self.x, self.y + self.nave_img.get_height() + 10, self.nave_img.get_width(), 10))
         pygame.draw.rect(janelinha, (0,255,0), (self.x, self.y + self.nave_img.get_height() + 10, self.nave_img.get_width() * (self.health/self.max_health), 10))
 
 
-class Inimigo(Nave):
+class Inimigo(Nave): #Nave Inimiga (Corona)
     COR_MAP = {
                 "vermelho": (INIMIGO_VERMELHO, CORONA_VERMELHO),
                 "verde": (INIMIGO_VERDE, CORONA_VERDE),
@@ -145,7 +144,7 @@ class Inimigo(Nave):
             self.contador_tempo_espera = 1
 
 
-def colide(obj1, obj2):
+def colide(obj1, obj2): #Define a colisão dos objetos
     desloc_x = obj2.x - obj1.x
     desloc_y = obj2.y - obj1.y
     return obj1.mask.overlap(obj2.mask, (desloc_x, desloc_y)) != None
