@@ -1,3 +1,14 @@
+#Jogo criado utilizando a Biblioteca Pygame
+#A ideia do jogo é "matar o covid", onde o logotipo do SUS lança vacinas no vírus.
+
+#Integrantes do grupo:
+#Celina Melo e Lister Ogusuku
+
+#Design de Software | Insper 2020.2
+
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+
 #Importando as bibliotecas necessárias
 import pygame
 import os
@@ -148,3 +159,45 @@ def colide(obj1, obj2): #Define a colisão dos objetos
     desloc_x = obj2.x - obj1.x
     desloc_y = obj2.y - obj1.y
     return obj1.mask.overlap(obj2.mask, (desloc_x, desloc_y)) != None
+
+
+
+def desenhar(janela_2):
+    janela_a = janelinha
+    janela_b = janela
+    janela_d = object(janela, self.janelinha)
+    janelona = [janela_A, janela_b, janela_d]
+    return janelona
+
+
+def principal():
+    run = True
+    FPS = 60
+    fase = 0
+    vidas = 5
+    texto_inicio = pygame.font.SysFont("comicsans", 50)
+    texto_perdeu = pygame.font.SysFont("comicsans", 60)
+
+    inimigos = []
+    alncance_do_inimigo = 5
+    velocidade_do_inimigo = 1
+
+    velocidade_do_jogador = 5
+    velocidade_do_laser = 5
+
+    jogador = Jogador(300, 630)
+
+    #Criei uma função pra definir nossa entrada principal do jogo e também coloquei fonte personalizada pra quando
+    #ele começa e perde o jogo
+    #coloquei velocidades também
+    #tanto pro jogador quanto pro laser
+    #ainda to na dúvida se isso daí tá certo, depois precisamos perguntar no atendimento
+    #E sua parte eu acho que tem uns errinhos, porque não consegui entender umas coisas
+    #Eu dei uma olhada em uns docs na internet e tive umas ideias pra melhorar o código também
+
+
+
+    #A gente precisa comitar e terminar tudo o quanto antes!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    #E eu também preciso entender umas coisas que vc fez no meio do código
+
+    #Dá uma olhada nesse final que eu coloquei e ve se faz sentido, se precisar mudar, muda, mas me avisa
