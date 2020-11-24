@@ -1,6 +1,9 @@
 #Jogo criado utilizando a Biblioteca Pygame
 #A ideia do jogo é "matar o covid", onde o logotipo do SUS lança vacinas no vírus.
 
+#Foi criado um novo repositório, pois o anterior estava com as imagens excessivamente grandes,
+#assim como discutimos anteriormente com o professor durante a aula.
+
 #Integrantes do grupo:
 #Celina Melo e Lister Ogusuku
 
@@ -61,7 +64,7 @@ class Corona:
 class Nave:
     Tempo_de_espera = 30
 
-    def __init__(self, x, y, health=100):
+    def __init__(self, x, y, health=100):  #O que é esse health? Não entendi
         self.x = x
         self.y = y
         self.health = health
@@ -140,6 +143,8 @@ class Inimigo(Nave): #Nave Inimiga (Corona)
                 "azul": (INIMIGO_AZUL, CORONA_AZUL)
                 }
 
+#Não entendi esses trechos que você criou, se você puder me explicar melhor depois, eu agradeço
+
     def __init__(self, x, y, cor, health=100):
         super().__init__(x, y, health)
         self.nave_img, self.laser_img = self.COR_MAP[cor]
@@ -156,30 +161,30 @@ class Inimigo(Nave): #Nave Inimiga (Corona)
 
 
 def colide(obj1, obj2): #Define a colisão dos objetos
-    desloc_x = obj2.x - obj1.x
-    desloc_y = obj2.y - obj1.y
-    return obj1.mask.overlap(obj2.mask, (desloc_x, desloc_y)) != None
+    desloc_x = obj2.x - obj1.x #Deslocamento em x
+    desloc_y = obj2.y - obj1.y #Deslocamento em y
+    return obj1.mask.overlap(obj2.mask, (desloc_x, desloc_y)) != None  #retorna objetos
 
 
 
-def desenhar(janela_2):
-    janela_a = janelinha
-    janela_b = janela
-    janela_d = object(janela, self.janelinha)
-    janelona = [janela_A, janela_b, janela_d]
-    return janelona
+# def desenhar(janela_2):
+#     janela_a = janelinha
+#     janela_b = janela
+#     janela_d = object(janela, self.janelinha)
+#     janelona = [janela_A, janela_b, janela_d]
+#     return janelona
 
 
 def principal():
-    run = True
+    anda = True
     FPS = 60
     fase = 0
     vidas = 5
-    texto_inicio = pygame.font.SysFont("comicsans", 50)
-    texto_perdeu = pygame.font.SysFont("comicsans", 60)
+    texto_inicio = pygame.font.SysFont("Century Ghotic", 50)
+    texto_quando_perde = pygame.font.SysFont("Century Ghotic", 60)
 
     inimigos = []
-    alncance_do_inimigo = 5
+    alcance_do_inimigo = 5
     velocidade_do_inimigo = 1
 
     velocidade_do_jogador = 5
@@ -201,3 +206,64 @@ def principal():
     #E eu também preciso entender umas coisas que vc fez no meio do código
 
     #Dá uma olhada nesse final que eu coloquei e ve se faz sentido, se precisar mudar, muda, mas me avisa
+
+
+     
+    temporizador = pygame.time.Clock()
+
+    perdeu = False
+    contador_perdeu = 0
+
+#Escrita na tela das vidas e fases
+
+    def desenhar_janela():
+        JANELA.blit(FUNDO_COVID, (0,0))
+        vidas_label = texto_inicio.render(f"Vidas: {vidas}", 1, (255,255,255))
+        fase_label = texto_inicio.render(f"Fase: {fase}", 1, (255,255,255))
+
+        JANELA.blit(vidas_label, (10, 10))
+        JANELA.blit(fase_label, (WIDTH - fase_label.get_width() - 10, 10))
+
+        for inimigo in inimigos:
+            inimigo.desenhar(JANELA)
+
+        jogador.desenhar(JANELA)
+
+        if perdeu:
+            texto_perdeu = texto_quando_perde.render("Você foi contaminado!!", 1, (255,255, 255))
+            JANELA.blit(texto_perdeu, (WIDTH/2 - texto_perdeu.get_width()/2, 350))
+
+        pygame.display.update()
+
+#Criei um loop pra quando ele anda e perde, vê se vc entende
+
+    while anda:
+        temporizador.tick(FPS)
+        desenhar_janela()
+
+        if vidas <= 0 or jogador.health <= 0:
+            perdeu = True
+            contador_perdeu += 1
+
+        if perdeu:
+            if contador_perdeu > FPS * 3:
+                anda = False
+            else:
+                continue
+
+        if len(inimigos) == 0:
+            fase += 1
+            alcance_do_inimigo += 5
+            for i in range(alcance_do_inimigo):
+                inimigo = Inimigo(random.randrange(50, WIDTH-100), random.randrange(-1500, -100), random.choice(["vermelho", "azul", "verde"]))
+                inimigos.append(inimigo)
+
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                quit()
+
+#Fiz até essa parte, mas falta alguns detalhes que a gente conversou durante a aula
+#Se vocÊ conseguir, faz e testa se roda
+#Qualquer coisa manda mensagem pra mim ou pro Luciano caso dê erro
+#Mas acho que tá tudo certo, mas TESTA!!!!!!
+#Falta pouco tempo pra entrega, tenta finalizar essa noite
