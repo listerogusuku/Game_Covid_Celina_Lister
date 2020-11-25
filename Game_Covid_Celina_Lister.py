@@ -143,8 +143,6 @@ class Inimigo(Nave): #Nave Inimiga (Corona)
                 "azul": (INIMIGO_AZUL, CORONA_AZUL)
                 }
 
-#Não entendi esses trechos que você criou, se você puder me explicar melhor depois, eu agradeço
-
     def __init__(self, x, y, cor, health=100):
         super().__init__(x, y, health)
         self.nave_img, self.laser_img = self.COR_MAP[cor]
@@ -165,16 +163,6 @@ def colide(obj1, obj2): #Define a colisão dos objetos
     desloc_y = obj2.y - obj1.y #Deslocamento em y
     return obj1.mask.overlap(obj2.mask, (desloc_x, desloc_y)) != None  #retorna objetos
 
-
-
-# def desenhar(janela_2):
-#     janela_a = janelinha
-#     janela_b = janela
-#     janela_d = object(janela, self.janelinha)
-#     janelona = [janela_A, janela_b, janela_d]
-#     return janelona
-
-
 def principal():
     anda = True
     FPS = 60
@@ -192,23 +180,6 @@ def principal():
 
     jogador = Jogador(300, 630)
 
-    #Criei uma função pra definir nossa entrada principal do jogo e também coloquei fonte personalizada pra quando
-    #ele começa e perde o jogo
-    #coloquei velocidades também
-    #tanto pro jogador quanto pro laser
-    #ainda to na dúvida se isso daí tá certo, depois precisamos perguntar no atendimento
-    #E sua parte eu acho que tem uns errinhos, porque não consegui entender umas coisas
-    #Eu dei uma olhada em uns docs na internet e tive umas ideias pra melhorar o código também
-
-
-
-    #A gente precisa comitar e terminar tudo o quanto antes!!!!!!!!!!!!!!!!!!!!!!!!!!!
-    #E eu também preciso entender umas coisas que vc fez no meio do código
-
-    #Dá uma olhada nesse final que eu coloquei e ve se faz sentido, se precisar mudar, muda, mas me avisa
-
-
-     
     temporizador = pygame.time.Clock()
 
     perdeu = False
@@ -235,8 +206,6 @@ def principal():
 
         pygame.display.update()
 
-#Criei um loop pra quando ele anda e perde, vê se vc entende
-
     while anda:
         temporizador.tick(FPS)
         desenhar_janela()
@@ -262,8 +231,48 @@ def principal():
             if event.type == pygame.QUIT:
                 quit()
 
-#Fiz até essa parte, mas falta alguns detalhes que a gente conversou durante a aula
-#Se vocÊ conseguir, faz e testa se roda
-#Qualquer coisa manda mensagem pra mim ou pro Luciano caso dê erro
-#Mas acho que tá tudo certo, mas TESTA!!!!!!
-#Falta pouco tempo pra entrega, tenta finalizar essa noite
+        keys = pygame.key.get_pressed()
+        if keys[pygame.K_a] and jogador.x - velocidade_do_jogador > 0: #Setinha da esquerda
+            jogador.x -= velocidade_do_jogador
+        if keys[pygame.K_d] and jogador.x + velocidade_do_jogador + jogador.get_width() < WIDTH: #Setinha da direita
+            jogador.x += velocidade_do_jogador
+        if keys[pygame.K_w] and jogador.y - velocidade_do_jogador > 0: #Setinha pra cima
+            jogador.y -= velocidade_do_jogador
+        if keys[pygame.K_s] and jogador.y + velocidade_do_jogador + jogador.get_height() + 15 < HEIGHT: #Setinha pra baixo
+            jogador.y += velocidade_do_jogador
+        if keys[pygame.K_SPACE]: #Espaço para atirar
+            jogador.atirar()
+
+        for inimigo in inimigos[:]: #Movimento do covid
+            inimigo.move(velocidade_do_inimigo)
+            inimigo.move_lasers(velocidade_do_laser, jogador)
+
+            if random.randrange(0, 2*60) == 1:
+                inimigo.atirar() #tiro de vírus do covid com laser
+
+            if colide(inimigo, jogador):
+                jogador.health -= 10
+                inimigos.remove(inimigo)
+            elif inimigo.y + inimigo.get_height() > HEIGHT:
+                vidas -= 1
+                inimigos.remove(inimigo)
+
+        jogador.move_lasers(-velocidade_do_laser, inimigos)
+
+def tela_principal():
+    fonte_titulo = pygame.font.SysFont("Century Ghotic", 70)
+    anda = True
+    while anda:
+        JANELA.blit(FUNDO_COVID, (0,0))
+        title_label = fonte_titulo.render("Clique para começar", 1, (255,255,255))
+        JANELA.blit(title_label, (WIDTH/2 - title_label.get_width()/2, 350))
+        pygame.display.update()
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                anda = False
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                principal()
+    pygame.quit()
+
+
+tela_principal()
