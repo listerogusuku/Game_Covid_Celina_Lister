@@ -13,6 +13,19 @@
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
+from pygame import mixer 
+  
+#Inicializa o mixer de música
+mixer.init() 
+
+#Carrega a música escolhida
+mixer.music.load("musica_jogo.mp3") 
+
+#Ajusta o volume
+mixer.music.set_volume(0.7) 
+  
+#Começa a tocar a música
+mixer.music.play()
 
 #Importando as bibliotecas necessárias
 import pygame
@@ -23,7 +36,7 @@ import random
 pygame.font.init() #Inicializa as fontes do pygame para seren utilizadas no jogo
 
 #Definindo altura e largura da janela do jogo
-WIDTH, HEIGHT = 750, 750 #Dimensões do display
+WIDTH, HEIGHT = 700, 700 #Dimensões do display
 JANELA = pygame.display.set_mode((WIDTH, HEIGHT)) #Definição do display
 pygame.display.set_caption("Kill Covid Game") #Nome do jogo
 
