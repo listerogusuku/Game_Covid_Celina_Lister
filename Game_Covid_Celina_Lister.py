@@ -7,6 +7,8 @@
 #Integrantes do grupo:
 #Celina Melo e Lister Ogusuku
 
+#Link do vídeo: 
+
 #Design de Software | Insper 2020.2
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -18,7 +20,7 @@ import os
 import time
 import random
 
-pygame.font.init() #Fonte para ser utilizada no jogo
+pygame.font.init() #Inicializa as fontes do pygame para seren utilizadas no jogo
 
 #Definindo altura e largura da janela do jogo
 WIDTH, HEIGHT = 750, 750 #Dimensões do display
@@ -163,12 +165,12 @@ def colide(obj1, obj2): #Define a colisão dos objetos
     desloc_y = obj2.y - obj1.y #Deslocamento em y
     return obj1.mask.overlap(obj2.mask, (desloc_x, desloc_y)) != None  #retorna objetos
 
-def principal():
+def principal(): #Função principal
     anda = True
     FPS = 60
     fase = 0
     vidas = 5
-    texto_inicio = pygame.font.SysFont("Century Ghotic", 50)
+    texto_inicio = pygame.font.SysFont("Century Ghotic", 50) #Escolhemos a fonte Century Ghotic pois achamos ela mais bonita do que as demais
     texto_quando_perde = pygame.font.SysFont("Century Ghotic", 60)
 
     inimigos = []
@@ -231,6 +233,7 @@ def principal():
             if event.type == pygame.QUIT:
                 quit()
 
+#Criando e configurando os "botões" do nosso jogo (A, D, W, S, SPACE) → "Setinhas"
         keys = pygame.key.get_pressed()
         if keys[pygame.K_a] and jogador.x - velocidade_do_jogador > 0: #Setinha da esquerda
             jogador.x -= velocidade_do_jogador
@@ -243,12 +246,12 @@ def principal():
         if keys[pygame.K_SPACE]: #Espaço para atirar
             jogador.atirar()
 
-        for inimigo in inimigos[:]: #Movimento do covid
+        for inimigo in inimigos[:]: #Movimento da covid
             inimigo.move(velocidade_do_inimigo)
             inimigo.move_lasers(velocidade_do_laser, jogador)
 
             if random.randrange(0, 2*60) == 1:
-                inimigo.atirar() #tiro de vírus do covid com laser
+                inimigo.atirar() #tiro de vírus da covid com laser
 
             if colide(inimigo, jogador):
                 jogador.health -= 10
