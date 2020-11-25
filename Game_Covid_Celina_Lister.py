@@ -7,7 +7,7 @@
 #Integrantes do grupo:
 #Celina Melo e Lister Ogusuku
 
-#Link do vídeo: 
+#Link do vídeo: https://youtu.be/hZpmteyFtGA
 
 #Design de Software | Insper 2020.2
 
@@ -45,7 +45,7 @@ INIMIGO_VERMELHO = pygame.image.load(os.path.join("covid_vermelho.png")) #Covid 
 INIMIGO_VERDE = pygame.image.load(os.path.join("covid_verde.png")) #Covid verde
 INIMIGO_AZUL = pygame.image.load(os.path.join("covid_azul.png")) #Covid azul
 
-#NAVE DO JOGADOR
+#Nave do Jogador
 logo_sus = pygame.image.load(os.path.join("logo_sus.png")) #Nave do jogador feita com o logotipo do SUS
 
 # Lasers
@@ -57,6 +57,7 @@ VACINA = pygame.image.load(os.path.join("vacina_covid.png")) #laser que o covid 
 #Fundo do jogo
 FUNDO_COVID= pygame.transform.scale(pygame.image.load(os.path.join("fundo_covid.png")), (WIDTH, HEIGHT))
 
+#Criação de uma orientação a objetos para o Corona
 class Corona:
     def __init__(self, x, y, img):
         self.x = x
@@ -76,6 +77,8 @@ class Corona:
     def impacto(self, obj):
         return colide(self, obj)
 
+#Criação de uma orientação a objetos da Nave (Jogador/SUS) com várias funções definidas
+#para desenhar, mover, atirar e outras funcionalidades do jogo
 class Nave:
     Tempo_de_espera = 30
 
@@ -100,7 +103,7 @@ class Nave:
             if laser.fora_da_tela(HEIGHT):
                 self.lasers.remove(laser)
             elif laser.impacto(obj):
-                obj.health -= 10
+                obj.health -= 10 #perde 10
                 self.lasers.remove(laser)
 
     def tempo_espera(self): #Define tempo de espera
@@ -121,6 +124,8 @@ class Nave:
     def get_height(self):
         return self.nave_img.get_height()
 
+#Criação de orientação a objetos relacionada à nave do jogador (SUS)
+#e definição de função dos lasers atirados pela covid
 class Jogador(Nave): #Nave do Jogador (SUS)
     def __init__(self, x, y, health=100):
         super().__init__(x, y, health)
@@ -137,20 +142,22 @@ class Jogador(Nave): #Nave do Jogador (SUS)
                 self.lasers.remove(laser)
             else:
                 for obj in objs:
-                    if laser.impacto(obj):
-                        objs.remove(obj)
+                    if laser.impacto(obj): #criação do if para o momento do impacto
+                        objs.remove(obj) #remoção do obj em caso de impacto
                         if laser in self.lasers:
                             self.lasers.remove(laser)
 
-    def desenhar(self, janelinha):
+    def desenhar(self, janelinha):  #Essa é a janelinha que a gente conversou no atendimento?
         super().desenhar(janelinha)
-        self.barra_de_vidas(janelinha)
+        self.barra_de_vidas(janelinha) #Janelinha da barra de vidas
 
+#Criação da barrinha de vidas que ainda há disponível
     def barra_de_vidas(self, janelinha): #Vida disponível
         pygame.draw.rect(janelinha, (255,0,0), (self.x, self.y + self.nave_img.get_height() + 10, self.nave_img.get_width(), 10))
         pygame.draw.rect(janelinha, (0,255,0), (self.x, self.y + self.nave_img.get_height() + 10, self.nave_img.get_width() * (self.health/self.max_health), 10))
 
-
+#Criação de uma orientação a objetos relacionada à nave do inimigo (os covids)
+#e variação na cor deles, pra deixar mais atraente e bonitinho para o jogo
 class Inimigo(Nave): #Nave Inimiga (Corona)
     COR_MAP = {
                 "vermelho": (INIMIGO_VERMELHO, CORONA_VERMELHO),
